@@ -1,21 +1,36 @@
-import React, { useRef,useState } from 'react'
-import { Image, StyleSheet, Text, View,TextInput,TouchableOpacity,Alert,ScrollView, Animated  } from 'react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View,ScrollView  } from 'react-native';
 import ButnSheet from './ButnSheet';
 import TodoInput from './TodoInput'
 import TodoList from './TodoList'
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 function Todo() {
   const [todoList, setTodoList] = useState([])
+
+  //#region alerta
   const [todoBackup, setTodoBackup] = useState([]);
+
+  const [oculto, setOculto] = useState(false)
+  const showAlert = () => {
+    setOculto(false)
+  };
+  const hideAlert = () => {
+    setOculto(true)
+  };
+
+//#endregion
+
+  //#region funciones
 
   const addTask = (task) => {
     setTodoList([
+      ...todoList,
       {
         id: Date.now() + 1,
         task: task,
         active: true
-      },
-      ...todoList
+      }
     ]);
     setTodoBackup(todoList);
   }
@@ -42,9 +57,12 @@ function Todo() {
   const todas = () => {
     setTodoList(todoBackup)
   }
+//#endregion
+
   return (
     <ScrollView>
       <View style={styles.container}>
+
         <Text style={styles.title}>Listas de tareas pendientes</Text>
 
         <View >
@@ -53,16 +71,42 @@ function Todo() {
         </View>
 
         <View style={styles.contadoresArea}>
-          <Text style={styles.contadores} >Total tareas: {todoList.length}</Text>
-          <Text style={styles.contadores} >Total de tareas completadas: {todoList.filter((item)=>!item.active).length}</Text>
-          <Text style={styles.contadores} >Total de tareas por completar: {todoList.filter((item)=>item.active).length}</Text>
+          <View style={styles.contador}>
+            <Text style={styles.contadoresText} >Total tareas:</Text>
+            <Text style={styles.contadoresNum1} >{todoList.length}</Text>
+          </View>
+          <View style={styles.contador}>
+            <Text style={styles.contadoresText} >Total de tareas completadas:</Text>
+            <Text style={styles.contadoresNum2} >{todoList.filter((item)=>!item.active).length}</Text>
+          </View>
+          <View style={styles.contador}>
+            <Text style={styles.contadoresText} >Total de tareas por completar:</Text>
+            <Text style={styles.contadoresNum3} >{todoList.filter((item)=>item.active).length}</Text>
+          </View>
         </View>
+
         <ButnSheet todoList={todoList} 
           todoBackup={todoBackup} 
           noActivas={noActivas} 
           activas={activas}
           deleteTask={deleteTask}
           todas={todas} />
+
+        <AwesomeAlert
+          show={oculto?false : true}
+          showProgress={false}
+          title="Bienvenido"
+          message="Agrega tus tareas pendientes"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showConfirmButton={true}
+          confirmText="Gracias"
+          confirmButtonColor="#A3C7D6"
+          onConfirmPressed={() => {
+            hideAlert();
+          }}
+        /> 
+
       </View>
     </ScrollView>
   )
@@ -70,26 +114,51 @@ function Todo() {
 
 
 const styles = StyleSheet.create({
-  
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor:'#3B0288',
+    backgroundColor:'#3F3B6C',
     height:"100%",
     width:380
     },
+    contador: {
+      alignItems: 'center',
+      justifyContent: "flex-start",
+      height:30,
+      width:"100%",
+      flexDirection:'row'
+      },
     title:{
       color:"white",
       fontSize: 20,
       fontWeight: "bold",
       marginBottom:20,
     },
-    contadores:{
-      color: "white"
+    contadoresText:{
+      color: "white",
+      fontSize: 15,
+    },
+    contadoresNum1:{
+      justifyContent:"flex-end",
+      marginLeft:140,
+      fontSize:25,
+      color:"#fff"
+    },
+    contadoresNum2:{
+      justifyContent:"flex-end",
+      marginLeft:27,
+      fontSize:25,
+      color:"#fff"
+    },
+    contadoresNum3:{
+      justifyContent:"flex-end",
+      marginLeft:18,
+      fontSize:25,
+      color:"#fff"
     },
     contadoresArea:{
-      marginLeft:-50
+      marginLeft:-30
     },
     botnes:{
       marginLeft:-130

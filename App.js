@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Todo from './components/Todo/Todo';
 
 export default function App() {
@@ -14,7 +14,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#3B0288',
+    backgroundColor:'#3F3B6C',
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop:50

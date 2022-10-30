@@ -4,18 +4,19 @@ import { CheckBox } from '@rneui/themed';
 
 
 const TodoList = ({todoList, toggleTask}) => {
+  
   return (
     <View style={styles.container}>
           {
             todoList.map(({id, task, active}) => (
-              <View key={id} style={styles.taskContainer} >
+              <View key={id} style={active? styles.taskContainer : styles.taskContainerDes}>
                 <CheckBox
                   center
                   checked={!active}
                   onPress={() => toggleTask(id)}
-                  containerStyle ={styles.checkbox}
-                  uncheckedColor={'red'}
-                  checkedColor={'#118997'}
+                  containerStyle ={active? styles.checkbox : styles.checkboxDes}
+                  uncheckedColor={'#F08080'}
+                  checkedColor={'#A3C7D6'}
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                 />
@@ -42,15 +43,31 @@ const styles = StyleSheet.create({
       textDecorationLine:"line-through"
     },
     checkbox:{
-      backgroundColor:"#C5A4EA",
+      backgroundColor:"#9F73AB",
+      height:50,
+      paddingTop:13
+    },
+    checkboxDes:{
+      backgroundColor:"#624F82",
       height:50,
       paddingTop:13
     },
     taskContainer:{
       flexDirection: "row",
-      width: 255,
+      width: 270,
       height: 50,
-      backgroundColor: "#C5A4EA",
+      backgroundColor: "#9F73AB",
+      marginLeft:-5,
+      borderRadius:10,
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      marginBottom:10
+    },
+    taskContainerDes:{
+      flexDirection: "row",
+      width: 270,
+      height: 50,
+      backgroundColor: "#624F82",
       marginLeft:-5,
       borderRadius:10,
       alignItems: 'center',

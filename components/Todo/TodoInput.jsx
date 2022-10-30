@@ -1,13 +1,32 @@
 import React from 'react'
-import { useState } from 'react'
-import { TextInput, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import { useState, } from 'react'
+import { TextInput, View, StyleSheet, TouchableOpacity, Animated} from 'react-native';
 import { Icon } from '@rneui/themed';
-import SweetAlert from 'react-native-sweet-alert';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
-const TodoInput = ({todoList ,addTask}) => {
+const TodoInput = ({addTask}) => {
     const [task, setTask] = useState("")
-
     
+    //#region alertas
+    const [oculto, setOculto] = useState(true)
+    const [oculto2, setOculto2] = useState(true)
+
+    const showAlert = () => {
+      setOculto(false)
+    };
+    const hideAlert = () => {
+      setOculto(true)
+    };
+
+    const showAlert2 = () => {
+      setOculto2(false)
+      setTimeout(hideAlert2, 1000)
+    };
+    const hideAlert2 = () => {
+      setOculto2(true)
+    };
+    //#endregion
+
     const handleChange = (task) => {
         setTask(task)
         console.log(task)
@@ -16,11 +35,13 @@ const TodoInput = ({todoList ,addTask}) => {
     const handleKey = (e) => {
           addTask(task)
           setTask("")
+          showAlert2()
     }
     
   return (
     <>
       <View style={styles.contendor}>
+
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -29,16 +50,46 @@ const TodoInput = ({todoList ,addTask}) => {
             onChangeText={handleChange} value={task}
           />
         </View> 
-        <TouchableOpacity style={styles.taskBtn} onPress={() => {handleKey()}} >
-        <Icon
-            onPress={() => {handleKey()}}
+
+        <TouchableOpacity style={styles.taskBtn} onPress={() => {(task.length === 0)?setOculto(!oculto):handleKey()}} >
+          <Icon
+            onPress={() => {(task.length === 0)?setOculto(!oculto):handleKey()}}
             name='check'
             type="font-awesome"
             size={15}
             reverse
-            color= '#E013D1'
+            color= '#9F73AB'
             />
         </TouchableOpacity>
+
+        <AwesomeAlert
+          show={oculto?false : true}
+          //contentContainerStyle={{backgroundColor:'white'}} se puede modificar desde la carpetaraiz
+          showProgress={false}
+          title="Oops..."
+          message="Introduce una tarea"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          //showCancelButton={true}
+          showConfirmButton={true}
+          //cancelText="No, cancel"
+          confirmText="Entendido"
+          confirmButtonColor="#A3C7D6"
+          onCancelPressed={() => {
+            hideAlert();
+          }}
+          onConfirmPressed={() => {
+            hideAlert();
+          }}
+        />
+        <AwesomeAlert
+          show={oculto2?false : true}
+          //contentContainerStyle={{backgroundColor:'white'}}
+          showProgress={false}
+          title="Guardada"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+        />
       </View>
       
     </>
@@ -58,7 +109,7 @@ const styles = StyleSheet.create({
       marginBottom:20
     },
     inputView: {
-      backgroundColor: "#2C4AC1",
+      backgroundColor: "#624F82",
       borderRadius: 10,
       width: 210,
       height: 50,
@@ -80,7 +131,7 @@ const styles = StyleSheet.create({
       height: 50,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "#E013D1",
+      backgroundColor: "#9F73AB",
       marginLeft:10
     },
     loginText:{
